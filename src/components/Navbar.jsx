@@ -1,17 +1,21 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 const navLinks = [
-  { label: "Inicio", href: "#inicio" },
-  { label: "Servicios", href: "#servicios" },
-  { label: "Portafolio", href: "#portafolio" },
-  { label: "Nosotros", href: "#nosotros" },
-  { label: "Contacto", href: "#contacto" },
+  { label: "Inicio", href: "#inicio", type: "hash" },
+  { label: "Servicios", href: "#servicios", type: "hash" },
+  { label: "Portafolio", href: "#portafolio", type: "hash" },
+  { label: "Nosotros", href: "#nosotros", type: "hash" },
+  { label: "Productos", href: "/productos", type: "route" },
+  { label: "Contacto", href: "#contacto", type: "hash" },
 ];
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -19,11 +23,27 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleNavClick = (href) => {
+  const handleNavClick = (link) => {
     setMenuOpen(false);
-    const el = document.querySelector(href);
-    if (el) el.scrollIntoView({ behavior: "smooth" });
+    if (link.type === "route") {
+      navigate(link.href);
+      window.scrollTo({ top: 0 });
+      return;
+    }
+    // hash link
+    if (location.pathname !== "/") {
+      navigate("/");
+      setTimeout(() => {
+        const el = document.querySelector(link.href);
+        if (el) el.scrollIntoView({ behavior: "smooth" });
+      }, 150);
+    } else {
+      const el = document.querySelector(link.href);
+      if (el) el.scrollIntoView({ behavior: "smooth" });
+    }
   };
+
+  const isProductosActive = location.pathname === "/productos";
 
   return (
     <motion.header
@@ -37,10 +57,10 @@ export default function Navbar() {
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
         <div className='flex items-center justify-between h-18 py-3'>
           {/* Logo */}
-          <a
-            href='#inicio'
+          <Link
+            to='/'
             className='flex items-center'
-            onClick={() => handleNavClick("#inicio")}
+            onClick={() => window.scrollTo({ top: 0 })}
           >
             <img
               src='/logo-horizontal.png'
@@ -61,43 +81,47 @@ export default function Navbar() {
               />
               Contactos Gráficos
             </span>
-          </a>
+          </Link>
 
-          {/* Desktop Nav */}
           <nav className='hidden md:flex items-center gap-8'>
-            {navLinks.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleNavClick(link.href);
-                }}
-                className='relative text-sm font-medium transition-colors duration-200 group'
-                style={{ color: "#1A3A8F" }}
-              >
-                {link.label}
-                <span
-                  className='absolute -bottom-1 left-0 w-0 h-0.5 rounded-full transition-all duration-300 group-hover:w-full'
-                  style={{ backgroundColor: "#2ECC40" }}
-                />
-              </a>
-            ))}
+            {navLinks.map((link) => {
+              const isActive =
+                link.type === "route" && location.pathname === link.href;
+              return (
+                <button
+                  key={link.label}
+                  onClick={() => handleNavClick(link)}
+                  className='relative text-sm font-medium transition-colors duration-200 group bg-transparent border-0 cursor-pointer'
+                  style={{ color: isActive ? "#2ECC40" : "#1A3A8F" }}
+                >
+                  {link.label}
+                  <span
+                    className='absolute -bottom-1 left-0 h-0.5 rounded-full transition-all duration-300 group-hover:w-full'
+                    style={{
+                      backgroundColor: "#2ECC40",
+                      width: isActive ? "100%" : "0",
+                    }}
+                  />
+                </button>
+              );
+            })}
           </nav>
 
           {/* CTA + Hamburger */}
           <div className='flex items-center gap-4'>
-            <a
-              href='#contacto'
+            <button
               onClick={(e) => {
-                e.preventDefault();
-                handleNavClick("#contacto");
+                handleNavClick({
+                  label: "Contacto",
+                  href: "#contacto",
+                  type: "hash",
+                });
               }}
-              className='hidden md:inline-flex items-center px-5 py-2.5 rounded-lg text-sm font-semibold text-white transition-all duration-300 hover:scale-105 hover:shadow-lg'
+              className='hidden md:inline-flex items-center px-5 py-2.5 rounded-lg text-sm font-semibold text-white transition-all duration-300 hover:scale-105 hover:shadow-lg border-0 cursor-pointer'
               style={{ backgroundColor: "#2ECC40" }}
             >
               Cotizar ahora
-            </a>
+            </button>
 
             {/* Hamburger */}
             <button
@@ -140,30 +164,33 @@ export default function Navbar() {
           >
             <nav className='px-6 py-4 flex flex-col gap-4'>
               {navLinks.map((link) => (
-                <a
+                <button
                   key={link.label}
-                  href={link.href}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleNavClick(link.href);
+                  onClick={() => handleNavClick(link)}
+                  className='w-full text-left text-base font-medium py-2 border-b transition-colors bg-transparent border-0 cursor-pointer'
+                  style={{
+                    color: "#1A3A8F",
+                    borderBottomColor: "#F5F5F5",
+                    borderBottomWidth: 1,
+                    borderBottomStyle: "solid",
                   }}
-                  className='text-base font-medium py-2 border-b transition-colors'
-                  style={{ color: "#1A3A8F", borderColor: "#F5F5F5" }}
                 >
                   {link.label}
-                </a>
+                </button>
               ))}
-              <a
-                href='#contacto'
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleNavClick("#contacto");
-                }}
-                className='mt-2 text-center px-5 py-3 rounded-lg text-sm font-semibold text-white'
+              <button
+                onClick={() =>
+                  handleNavClick({
+                    label: "Contacto",
+                    href: "#contacto",
+                    type: "hash",
+                  })
+                }
+                className='mt-2 text-center px-5 py-3 rounded-lg text-sm font-semibold text-white border-0 cursor-pointer w-full'
                 style={{ backgroundColor: "#2ECC40" }}
               >
                 Cotizar ahora
-              </a>
+              </button>
             </nav>
           </motion.div>
         )}

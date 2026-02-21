@@ -1,24 +1,17 @@
+import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
-import Hero from "./components/Hero";
-import Servicios from "./components/Servicios";
-import Stats from "./components/Stats";
-import Portafolio from "./components/Portafolio";
-import Testimonios from "./components/Testimonios";
-import CTAFinal from "./components/CTAFinal";
 import Footer from "./components/Footer";
+import Home from "./pages/Home";
+import Catalogo from "./pages/Catalogo";
 
 export default function App() {
   return (
     <>
       <Navbar />
-      <main>
-        <Hero />
-        <Servicios />
-        <Stats />
-        <Portafolio />
-        <Testimonios />
-        <CTAFinal />
-      </main>
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path='/productos' element={<Catalogo />} />
+      </Routes>
       <Footer />
     </>
   );
