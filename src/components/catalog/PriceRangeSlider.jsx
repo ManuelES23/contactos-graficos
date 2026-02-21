@@ -60,8 +60,8 @@ export default function PriceRangeSlider() {
         className='flex justify-between text-xs font-semibold mb-4'
         style={{ color: "#1A3A8F" }}
       >
-        <span>Q{values[0].toLocaleString()}</span>
-        <span>Q{values[1].toLocaleString()}</span>
+        <span>${values[0].toLocaleString()}</span>
+        <span>${values[1].toLocaleString()}</span>
       </div>
 
       {/* Track */}
@@ -99,8 +99,8 @@ export default function PriceRangeSlider() {
 
       {/* Range labels */}
       <div className='flex justify-between text-xs text-gray-400 mt-3'>
-        <span>Q0</span>
-        <span>Q5,000+</span>
+        <span>$0</span>
+        <span>$5,000+</span>
       </div>
     </div>
   );

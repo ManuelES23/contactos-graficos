@@ -127,7 +127,7 @@ function ListCard({ product, index }) {
           className='font-heading font-black text-base mt-auto'
           style={{ color: "#1A3A8F" }}
         >
-          Desde Q{product.price.toLocaleString()}
+          Desde ${product.price.toLocaleString()}
         </p>
       </div>
       <div className='flex items-center gap-2 shrink-0'>

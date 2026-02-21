@@ -148,7 +148,7 @@ export default function ProductCard({ product, index = 0 }) {
               className='font-heading font-black text-lg leading-none'
               style={{ color: "#1A3A8F" }}
             >
-              Q{product.price.toLocaleString()}
+              ${product.price.toLocaleString()}
             </p>
           </div>
           <button

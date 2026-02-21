@@ -212,7 +212,7 @@ export default function ProductModal() {
                         className='font-heading font-black text-3xl'
                         style={{ color: "#1A3A8F" }}
                       >
-                        Q{p.price.toLocaleString()}
+                        ${p.price.toLocaleString()}
                       </p>
                     </div>
                     {/* Quantity */}
