@@ -1,21 +1,6 @@
 import { motion } from "framer-motion";
-
-const navLinks = [
-  { label: "Inicio", href: "#inicio" },
-  { label: "Servicios", href: "#servicios" },
-  { label: "Portafolio", href: "#portafolio" },
-  { label: "Nosotros", href: "#nosotros" },
-  { label: "Contacto", href: "#contacto" },
-];
-
-const servicios = [
-  "Diseño Gráfico",
-  "Publicidad Exterior",
-  "Adhesivos y Viniles",
-  "Señalética",
-  "Impresión Digital",
-  "Branding Corporativo",
-];
+import { useLang } from "../context/LanguageContext";
+import { t } from "../i18n/translations";
 
 const socials = [
   {
@@ -57,6 +42,16 @@ const socials = [
 ];
 
 export default function Footer() {
+  const { lang } = useLang();
+  const tr = t[lang].footer;
+
+  const navLinks = tr.navLinks.map((label, i) => ({
+    label,
+    href: ["#inicio", "#servicios", "#portafolio", "#nosotros", "#contacto"][i],
+  }));
+
+  const servicios = tr.serviciosList;
+
   const handleNav = (href) => {
     const el = document.querySelector(href);
     if (el) el.scrollIntoView({ behavior: "smooth" });
@@ -95,8 +90,7 @@ export default function Footer() {
               </span>
             </a>
             <p className='text-white/50 text-sm leading-relaxed mb-6'>
-              Más de 10 años transformando ideas en comunicación visual
-              poderosa. Tu marca, nuestra pasión.
+              {tr.tagline}
             </p>
             {/* Socials */}
             <div className='flex gap-3'>
@@ -119,7 +113,7 @@ export default function Footer() {
           {/* Quick links */}
           <div>
             <h4 className='font-heading font-bold text-white mb-5'>
-              Navegación
+              {tr.navegacion}
             </h4>
             <ul className='space-y-3'>
               {navLinks.map((link) => (
@@ -146,7 +140,7 @@ export default function Footer() {
           {/* Services */}
           <div>
             <h4 className='font-heading font-bold text-white mb-5'>
-              Servicios
+              {tr.servicios}
             </h4>
             <ul className='space-y-3'>
               {servicios.map((s) => (
@@ -172,7 +166,9 @@ export default function Footer() {
 
           {/* Contact */}
           <div>
-            <h4 className='font-heading font-bold text-white mb-5'>Contacto</h4>
+            <h4 className='font-heading font-bold text-white mb-5'>
+              {tr.contacto}
+            </h4>
             <ul className='space-y-4'>
               {[
                 {
@@ -250,7 +246,7 @@ export default function Footer() {
                       />
                     </svg>
                   ),
-                  text: "Lun–Vie 8:00–18:00",
+                  text: tr.hours,
                 },
               ].map((c) => (
                 <li
@@ -268,15 +264,14 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className='mt-14 pt-8 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-4 text-white/30 text-xs'>
           <span>
-            © {new Date().getFullYear()} Contactos Gráficos. Todos los derechos
-            reservados.
+            © {new Date().getFullYear()} Contactos Gráficos. {tr.rights}
           </span>
           <div className='flex gap-5'>
             <a href='#' className='hover:text-white transition-colors'>
-              Política de privacidad
+              {tr.privacy}
             </a>
             <a href='#' className='hover:text-white transition-colors'>
-              Términos de uso
+              {tr.terms}
             </a>
           </div>
         </div>

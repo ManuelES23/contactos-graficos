@@ -1,10 +1,14 @@
 import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import gsap from "gsap";
-
-const words = ["visible", "poderosa", "memorable", "única"];
+import { useLang } from "../context/LanguageContext";
+import { t } from "../i18n/translations";
 
 export default function Hero() {
+  const { lang } = useLang();
+  const tr = t[lang].hero;
+  const words = tr.words;
+
   const wordRef = useRef(null);
   const heroRef = useRef(null);
   const dotRef = useRef(null);
@@ -14,6 +18,7 @@ export default function Hero() {
     let index = 0;
     const el = wordRef.current;
     if (!el) return;
+    el.textContent = words[0];
 
     const cycleWords = () => {
       gsap.to(el, {
@@ -40,7 +45,7 @@ export default function Hero() {
     );
 
     return () => clearInterval(interval);
-  }, []);
+  }, [lang]);
 
   useEffect(() => {
     // Floating dots parallax on mouse move
@@ -128,7 +133,7 @@ export default function Hero() {
                 className='w-2 h-2 rounded-full animate-pulse'
                 style={{ backgroundColor: "#2ECC40" }}
               />
-              Agencia de Publicidad &amp; Diseño Gráfico
+              {tr.badge}
             </motion.div>
 
             {/* Headline */}
@@ -139,9 +144,9 @@ export default function Hero() {
               className='font-heading font-black text-5xl sm:text-6xl lg:text-7xl leading-tight mb-4'
               style={{ color: "#1A3A8F" }}
             >
-              Hacemos tu
+              {tr.headline1}
               <br />
-              marca{" "}
+              {tr.headline2}{" "}
               <span
                 ref={wordRef}
                 className='inline-block'
@@ -158,9 +163,7 @@ export default function Hero() {
               transition={{ duration: 0.6, delay: 0.55 }}
               className='text-lg text-gray-600 mb-8 max-w-lg leading-relaxed'
             >
-              Diseño gráfico, publicidad exterior, adhesivos, señalética e
-              impresión digital de alto impacto. Transformamos tu imagen en
-              resultados reales.
+              {tr.sub}
             </motion.p>
 
             {/* CTA Buttons */}
@@ -181,7 +184,7 @@ export default function Hero() {
                 className='inline-flex items-center gap-2 px-7 py-3.5 rounded-xl font-semibold text-white text-base transition-all duration-300 hover:scale-105 hover:shadow-xl'
                 style={{ backgroundColor: "#1A3A8F" }}
               >
-                Solicitar cotización
+                {tr.cta1}
                 <svg
                   className='w-4 h-4'
                   fill='none'
@@ -207,7 +210,7 @@ export default function Hero() {
                 className='inline-flex items-center gap-2 px-7 py-3.5 rounded-xl font-semibold text-base transition-all duration-300 hover:scale-105 border-2'
                 style={{ borderColor: "#2ECC40", color: "#1A3A8F" }}
               >
-                Ver portafolio
+                {tr.cta2}
               </a>
             </motion.div>
 
@@ -218,11 +221,7 @@ export default function Hero() {
               transition={{ duration: 0.5, delay: 0.85 }}
               className='mt-12 flex flex-wrap gap-8'
             >
-              {[
-                { value: "10+", label: "Años de experiencia" },
-                { value: "500+", label: "Clientes satisfechos" },
-                { value: "2000+", label: "Proyectos completados" },
-              ].map((s) => (
+              {[tr.stat1, tr.stat2, tr.stat3].map((s) => (
                 <div key={s.label} className='flex flex-col'>
                   <span
                     className='font-heading font-black text-3xl'
@@ -246,42 +245,69 @@ export default function Hero() {
             className='hidden lg:block relative'
           >
             <div className='relative w-full aspect-square max-w-lg mx-auto'>
-              {/* Main card */}
-              <div
-                className='absolute inset-8 rounded-3xl overflow-hidden shadow-2xl'
+              {/* Rotating outer ring */}
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
+                className='absolute inset-4 rounded-[2.5rem]'
                 style={{
                   background:
-                    "linear-gradient(145deg, #1A3A8F 0%, #0D2260 100%)",
+                    "conic-gradient(from 0deg, #1A3A8F, #2ECC40, #1A3A8F, #2ECC40, #1A3A8F)",
+                  padding: "3px",
                 }}
               >
-                {/* Inner design mock */}
-                <div className='absolute inset-0 flex flex-col items-center justify-center p-8 text-white text-center'>
-                  <div
-                    className='w-16 h-1 rounded-full mb-6'
-                    style={{ backgroundColor: "#2ECC40" }}
-                  />
-                  <div className='font-heading font-black text-3xl mb-3 leading-tight'>
-                    Tu Marca
-                    <br />
-                    en Todos Lados
-                  </div>
-                  <div className='text-white/60 text-sm'>
-                    Publicidad · Diseño · Adhesivos
-                  </div>
-                  <div className='mt-8 grid grid-cols-3 gap-4 w-full'>
-                    {[...Array(6)].map((_, i) => (
-                      <div
-                        key={i}
-                        className='rounded-xl aspect-video bg-white/10 animate-pulse'
-                        style={{ animationDelay: `${i * 0.15}s` }}
-                      />
-                    ))}
-                  </div>
-                  <div
-                    className='mt-6 w-full h-1 rounded-full'
-                    style={{ backgroundColor: "#2ECC40" }}
-                  />
-                </div>
+                <div
+                  className='w-full h-full rounded-[2.4rem]'
+                  style={{
+                    background:
+                      "linear-gradient(135deg, #f0f4ff 0%, #ffffff 40%, #e8eeff 100%)",
+                  }}
+                />
+              </motion.div>
+
+              {/* Glowing halo */}
+              <div
+                className='absolute inset-10 rounded-3xl blur-2xl opacity-30'
+                style={{
+                  background:
+                    "radial-gradient(ellipse at center, #2ECC40 0%, #1A3A8F 60%, transparent 100%)",
+                }}
+              />
+
+              {/* Main card – Logo */}
+              <div
+                className='absolute inset-8 rounded-3xl overflow-hidden shadow-2xl flex items-center justify-center'
+                style={{
+                  background:
+                    "linear-gradient(145deg, #f0f4ff 0%, #ffffff 45%, #e8fff0 100%)",
+                }}
+              >
+                {/* Subtle dot pattern */}
+                <div
+                  className='absolute inset-0 opacity-10'
+                  style={{
+                    backgroundImage:
+                      "radial-gradient(#1A3A8F 1px, transparent 1px)",
+                    backgroundSize: "20px 20px",
+                  }}
+                />
+
+                {/* Corner accents */}
+                <div
+                  className='absolute top-0 left-0 w-16 h-16 rounded-br-3xl opacity-20'
+                  style={{ backgroundColor: "#1A3A8F" }}
+                />
+                <div
+                  className='absolute bottom-0 right-0 w-16 h-16 rounded-tl-3xl opacity-20'
+                  style={{ backgroundColor: "#2ECC40" }}
+                />
+
+                {/* Logo */}
+                <img
+                  src='/logo-normal .png'
+                  alt='Contactos Gráficos'
+                  className='relative z-10 w-4/5 h-4/5 object-contain drop-shadow-lg'
+                />
               </div>
 
               {/* Floating badge 1 */}
@@ -317,11 +343,9 @@ export default function Hero() {
                     className='font-semibold text-sm'
                     style={{ color: "#1A3A8F" }}
                   >
-                    Calidad Premium
+                    {tr.badge1Title}
                   </div>
-                  <div className='text-xs text-gray-400'>
-                    Material garantizado
-                  </div>
+                  <div className='text-xs text-gray-400'>{tr.badge1Sub}</div>
                 </div>
               </motion.div>
 
@@ -359,9 +383,9 @@ export default function Hero() {
                     className='font-semibold text-sm'
                     style={{ color: "#1A3A8F" }}
                   >
-                    Entrega rápida
+                    {tr.badge2Title}
                   </div>
-                  <div className='text-xs text-gray-400'>Siempre a tiempo</div>
+                  <div className='text-xs text-gray-400'>{tr.badge2Sub}</div>
                 </div>
               </motion.div>
             </div>
@@ -377,7 +401,7 @@ export default function Hero() {
         className='absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2'
       >
         <span className='text-xs text-gray-400 font-medium tracking-widest uppercase'>
-          Scroll
+          {tr.scroll}
         </span>
         <motion.div
           animate={{ y: [0, 8, 0] }}

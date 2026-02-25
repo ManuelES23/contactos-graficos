@@ -2,12 +2,14 @@ import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import gsap from "gsap";
+import { useLang } from "../context/LanguageContext";
+import { t } from "../i18n/translations";
 
-const stats = [
-  { value: 10, suffix: "+", label: "Años de experiencia", icon: "🏆" },
-  { value: 500, suffix: "+", label: "Clientes satisfechos", icon: "🤝" },
-  { value: 2000, suffix: "+", label: "Proyectos completados", icon: "✅" },
-  { value: 98, suffix: "%", label: "Clientes que regresan", icon: "⭐" },
+const statsData = [
+  { value: 10, suffix: "+", icon: "🏆" },
+  { value: 500, suffix: "+", icon: "🤝" },
+  { value: 2000, suffix: "+", icon: "✅" },
+  { value: 98, suffix: "%", icon: "⭐" },
 ];
 
 const features = [
@@ -27,9 +29,8 @@ const features = [
         />
       </svg>
     ),
-    titulo: "Materiales de Primera",
-    descripcion:
-      "Trabajamos únicamente con insumos certificados y proveedores internacionales para garantizar la durabilidad de cada producto.",
+    titulo: "",
+    descripcion: "",
   },
   {
     icon: (
@@ -47,9 +48,8 @@ const features = [
         />
       </svg>
     ),
-    titulo: "Entregas Puntuales",
-    descripcion:
-      "Respetamos cada plazo acordado. Tu tiempo es valioso y lo sabemos: procesos ágiles sin sacrificar calidad.",
+    titulo: "",
+    descripcion: "",
   },
   {
     icon: (
@@ -67,9 +67,8 @@ const features = [
         />
       </svg>
     ),
-    titulo: "Equipo Especializado",
-    descripcion:
-      "Diseñadores, impresores y asesores comerciales con amplia experiencia en el sector de la comunicación visual.",
+    titulo: "",
+    descripcion: "",
   },
   {
     icon: (
@@ -87,11 +86,12 @@ const features = [
         />
       </svg>
     ),
-    titulo: "Precios Competitivos",
-    descripcion:
-      "Soluciones de calidad premium accesibles. Cotizaciones transparentes sin costos ocultos ni sorpresas al final.",
+    titulo: "",
+    descripcion: "",
   },
 ];
+
+const featuresIcons = features;
 
 function CounterItem({ value, suffix, label }) {
   const countRef = useRef(null);
@@ -129,6 +129,15 @@ function CounterItem({ value, suffix, label }) {
 }
 
 export default function Stats() {
+  const { lang } = useLang();
+  const tr = t[lang].stats;
+
+  const stats = statsData.map((s, i) => ({ ...s, label: tr.items[i].label }));
+  const features = featuresIcons.map((f, i) => ({
+    ...f,
+    titulo: tr.features[i].titulo,
+    descripcion: tr.features[i].descripcion,
+  }));
   return (
     <section
       id='nosotros'
@@ -155,16 +164,15 @@ export default function Stats() {
               className='w-1.5 h-1.5 rounded-full'
               style={{ backgroundColor: "#2ECC40" }}
             />
-            ¿Por qué elegirnos?
+            {tr.badge}
           </div>
           <h2 className='font-heading font-black text-4xl sm:text-5xl text-white mb-4'>
-            Más de una década
+            {tr.title1}
             <br />
-            <span style={{ color: "#2ECC40" }}>haciendo marcas poderosas</span>
+            <span style={{ color: "#2ECC40" }}>{tr.title2}</span>
           </h2>
           <p className='text-white/50 text-lg max-w-xl mx-auto leading-relaxed'>
-            Nuestros números hablan por sí solos. Confianza, calidad y
-            resultados son la base de todo lo que hacemos.
+            {tr.sub}
           </p>
         </motion.div>
 

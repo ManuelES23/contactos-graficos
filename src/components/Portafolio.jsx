@@ -5,75 +5,47 @@ import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import { useLang } from "../context/LanguageContext";
+import { t } from "../i18n/translations";
 
-const categorias = ["Todos", "Diseño", "Impresión", "Adhesivos", "Señalética"];
+// Category keys in Spanish for filtering (must match data)
+const categoriasSP = [
+  "Todos",
+  "Diseño",
+  "Impresión",
+  "Adhesivos",
+  "Señalética",
+];
 
-const proyectos = [
-  {
-    id: 1,
-    titulo: "Branding Corporativo",
-    categoria: "Diseño",
-    descripcion: "Identidad visual completa para empresa de logística",
-    img: "https://picsum.photos/seed/cg1/600/400",
-  },
-  {
-    id: 2,
-    titulo: "Valla Publicitaria",
-    categoria: "Impresión",
-    descripcion: "Campaña exterior de gran formato para retail",
-    img: "https://picsum.photos/seed/cg2/600/400",
-  },
-  {
-    id: 3,
-    titulo: "Viniles Decorativos",
-    categoria: "Adhesivos",
-    descripcion: "Decoración integral para locales comerciales",
-    img: "https://picsum.photos/seed/cg3/600/400",
-  },
-  {
-    id: 4,
-    titulo: "Manual de Marca",
-    categoria: "Diseño",
-    descripcion: "Guía de identidad visual para startup tecnológica",
-    img: "https://picsum.photos/seed/cg4/600/400",
-  },
-  {
-    id: 5,
-    titulo: "Señalética de Seguridad",
-    categoria: "Señalética",
-    descripcion: "Sistema de señalización para planta industrial",
-    img: "https://picsum.photos/seed/cg5/600/400",
-  },
-  {
-    id: 6,
-    titulo: "Catalogo Impreso",
-    categoria: "Impresión",
-    descripcion: "Catálogo de 48 páginas full color para distribuidora",
-    img: "https://picsum.photos/seed/cg6/600/400",
-  },
-  {
-    id: 7,
-    titulo: "Stickers Corporativos",
-    categoria: "Adhesivos",
-    descripcion: "Pack de stickers troquelados para marca de café",
-    img: "https://picsum.photos/seed/cg7/600/400",
-  },
-  {
-    id: 8,
-    titulo: "Directorio Corporativo",
-    categoria: "Señalética",
-    descripcion: "Sistema de directorio para edificio corporativo",
-    img: "https://picsum.photos/seed/cg8/600/400",
-  },
+const proyectosBase = [
+  { id: 1, categoriaIdx: 1, img: "https://picsum.photos/seed/cg1/600/400" },
+  { id: 2, categoriaIdx: 2, img: "https://picsum.photos/seed/cg2/600/400" },
+  { id: 3, categoriaIdx: 3, img: "https://picsum.photos/seed/cg3/600/400" },
+  { id: 4, categoriaIdx: 1, img: "https://picsum.photos/seed/cg4/600/400" },
+  { id: 5, categoriaIdx: 4, img: "https://picsum.photos/seed/cg5/600/400" },
+  { id: 6, categoriaIdx: 2, img: "https://picsum.photos/seed/cg6/600/400" },
+  { id: 7, categoriaIdx: 3, img: "https://picsum.photos/seed/cg7/600/400" },
+  { id: 8, categoriaIdx: 4, img: "https://picsum.photos/seed/cg8/600/400" },
+  { id: 9, categoriaIdx: 1, img: "https://picsum.photos/seed/cg9/600/400" },
 ];
 
 export default function Portafolio() {
-  const [activo, setActivo] = useState("Todos");
+  const [activoIdx, setActivoIdx] = useState(0);
+  const { lang } = useLang();
+  const tr = t[lang].portafolio;
+
+  const proyectos = proyectosBase.map((p, i) => ({
+    ...p,
+    titulo: tr.proyectos[i]?.titulo ?? "",
+    descripcion: tr.proyectos[i]?.descripcion ?? "",
+    categoria: categoriasSP[p.categoriaIdx],
+    categoriaLabel: tr.categorias[p.categoriaIdx],
+  }));
 
   const filtrados =
-    activo === "Todos"
+    activoIdx === 0
       ? proyectos
-      : proyectos.filter((p) => p.categoria === activo);
+      : proyectos.filter((p) => p.categoriaIdx === activoIdx);
 
   return (
     <section
@@ -98,20 +70,17 @@ export default function Portafolio() {
               className='w-1.5 h-1.5 rounded-full'
               style={{ backgroundColor: "#2ECC40" }}
             />
-            Nuestro Portafolio
+            {tr.badge}
           </div>
           <h2
             className='font-heading font-black text-4xl sm:text-5xl mb-4'
             style={{ color: "#1A3A8F" }}
           >
-            Trabajos que hablan
+            {tr.title1}
             <br />
-            <span style={{ color: "#2ECC40" }}>por sí mismos</span>
+            <span style={{ color: "#2ECC40" }}>{tr.title2}</span>
           </h2>
-          <p className='text-gray-500 text-lg max-w-xl mx-auto'>
-            Una muestra de nuestros proyectos más recientes y el impacto que
-            generamos para nuestros clientes.
-          </p>
+          <p className='text-gray-500 text-lg max-w-xl mx-auto'>{tr.sub}</p>
         </motion.div>
 
         {/* Filter tabs */}
@@ -122,13 +91,13 @@ export default function Portafolio() {
           transition={{ duration: 0.5, delay: 0.2 }}
           className='flex flex-wrap justify-center gap-3 mb-10'
         >
-          {categorias.map((cat) => (
+          {tr.categorias.map((cat, idx) => (
             <button
               key={cat}
-              onClick={() => setActivo(cat)}
+              onClick={() => setActivoIdx(idx)}
               className='px-5 py-2 rounded-full text-sm font-semibold transition-all duration-300'
               style={
-                activo === cat
+                activoIdx === idx
                   ? { backgroundColor: "#1A3A8F", color: "#fff" }
                   : {
                       backgroundColor: "#fff",
@@ -173,7 +142,7 @@ export default function Portafolio() {
                     className='text-xs font-semibold px-2.5 py-1 rounded-full mb-2 self-start'
                     style={{ backgroundColor: "#2ECC40", color: "#fff" }}
                   >
-                    {p.categoria}
+                    {p.categoriaLabel}
                   </span>
                   <h3 className='font-heading font-bold text-white text-sm leading-tight'>
                     {p.titulo}
@@ -216,7 +185,7 @@ export default function Portafolio() {
                       className='text-xs font-semibold px-2 py-0.5 rounded-full mr-2'
                       style={{ backgroundColor: "#2ECC40", color: "#fff" }}
                     >
-                      {p.categoria}
+                      {p.categoriaLabel}
                     </span>
                     <span className='text-white text-sm font-bold'>
                       {p.titulo}

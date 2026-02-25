@@ -1,7 +1,9 @@
 import { useInView } from "react-intersection-observer";
 import { motion } from "framer-motion";
+import { useLang } from "../context/LanguageContext";
+import { t } from "../i18n/translations";
 
-const servicios = [
+const serviciosIcons = [
   {
     icon: (
       <svg
@@ -18,9 +20,8 @@ const servicios = [
         />
       </svg>
     ),
-    titulo: "Diseño Gráfico",
-    descripcion:
-      "Creamos identidades visuales impactantes: logotipos, branding completo y material gráfico que comunica y convierte.",
+    titulo: "",
+    descripcion: "",
     color: "#e8eeff",
   },
   {
@@ -39,9 +40,8 @@ const servicios = [
         />
       </svg>
     ),
-    titulo: "Publicidad Exterior",
-    descripcion:
-      "Vallas, rótulos y displays que hacen que tu marca destaque en cualquier espacio público. Máxima visibilidad.",
+    titulo: "",
+    descripcion: "",
     color: "#e8f5e9",
   },
   {
@@ -60,9 +60,8 @@ const servicios = [
         />
       </svg>
     ),
-    titulo: "Adhesivos y Viniles",
-    descripcion:
-      "Stickers, vinilos de corte, laminados y adhesivos de alta calidad para cualquier superficie interior o exterior.",
+    titulo: "",
+    descripcion: "",
     color: "#fff7e8",
   },
   {
@@ -86,9 +85,8 @@ const servicios = [
         />
       </svg>
     ),
-    titulo: "Señalética",
-    descripcion:
-      "Sistemas de señalización corporativa e institucional: señales de seguridad, directorio, orientación y más.",
+    titulo: "",
+    descripcion: "",
     color: "#f5e8ff",
   },
   {
@@ -107,9 +105,8 @@ const servicios = [
         />
       </svg>
     ),
-    titulo: "Impresión Digital",
-    descripcion:
-      "Impresión de gran formato, catálogos, flyers, banners y toda clase de material impreso con calidad superior.",
+    titulo: "",
+    descripcion: "",
     color: "#e8f5e9",
   },
   {
@@ -128,9 +125,8 @@ const servicios = [
         />
       </svg>
     ),
-    titulo: "Branding Corporativo",
-    descripcion:
-      "Desarrollamos tu identidad corporativa completa: manual de marca, papelería, uniformes, packaging y mucho más.",
+    titulo: "",
+    descripcion: "",
     color: "#e8eeff",
   },
 ];
@@ -151,6 +147,14 @@ const cardVariants = {
 
 export default function Servicios() {
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.1 });
+  const { lang } = useLang();
+  const tr = t[lang].servicios;
+
+  const servicios = serviciosIcons.map((s, i) => ({
+    ...s,
+    titulo: tr.items[i].titulo,
+    descripcion: tr.items[i].descripcion,
+  }));
 
   return (
     <section id='servicios' className='py-24 bg-white'>
@@ -171,19 +175,18 @@ export default function Servicios() {
               className='w-1.5 h-1.5 rounded-full'
               style={{ backgroundColor: "#2ECC40" }}
             />
-            Nuestros Servicios
+            {tr.badge}
           </div>
           <h2
             className='font-heading font-black text-4xl sm:text-5xl mb-4'
             style={{ color: "#1A3A8F" }}
           >
-            Todo lo que tu marca
+            {tr.title1}
             <br />
-            <span style={{ color: "#2ECC40" }}>necesita para destacar</span>
+            <span style={{ color: "#2ECC40" }}>{tr.title2}</span>
           </h2>
           <p className='text-gray-500 text-lg max-w-xl mx-auto leading-relaxed'>
-            Ofrecemos soluciones integrales de comunicación visual para empresas
-            que quieren diferenciarse y crecer.
+            {tr.sub}
           </p>
         </motion.div>
 
@@ -231,7 +234,7 @@ export default function Servicios() {
                 className='mt-4 flex items-center gap-1.5 text-sm font-medium opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-0 group-hover:translate-x-1'
                 style={{ color: "#2ECC40" }}
               >
-                Conocer más
+                {tr.learnMore}
                 <svg
                   className='w-4 h-4'
                   fill='none'

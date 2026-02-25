@@ -3,6 +3,8 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
+import { useLang } from "../context/LanguageContext";
+import { t } from "../i18n/translations";
 
 const testimonios = [
   {
@@ -65,6 +67,8 @@ function Stars({ count }) {
 }
 
 export default function Testimonios() {
+  const { lang } = useLang();
+  const tr = t[lang].testimonios;
   return (
     <section className='py-24 bg-white'>
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
@@ -84,20 +88,17 @@ export default function Testimonios() {
               className='w-1.5 h-1.5 rounded-full'
               style={{ backgroundColor: "#2ECC40" }}
             />
-            Testimonios
+            {tr.badge}
           </div>
           <h2
             className='font-heading font-black text-4xl sm:text-5xl mb-4'
             style={{ color: "#1A3A8F" }}
           >
-            Lo que dicen
+            {tr.title1}
             <br />
-            <span style={{ color: "#2ECC40" }}>nuestros clientes</span>
+            <span style={{ color: "#2ECC40" }}>{tr.title2}</span>
           </h2>
-          <p className='text-gray-500 text-lg max-w-xl mx-auto'>
-            La satisfacción de nuestros clientes es nuestro mejor aval. Aquí te
-            contamos su experiencia con Contactos Gráficos.
-          </p>
+          <p className='text-gray-500 text-lg max-w-xl mx-auto'>{tr.sub}</p>
         </motion.div>
 
         <Swiper
