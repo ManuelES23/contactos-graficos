@@ -276,7 +276,7 @@ export default function Hero() {
 
               {/* Main card – Logo */}
               <div
-                className='absolute inset-8 rounded-3xl overflow-hidden shadow-2xl flex items-center justify-center'
+                className='absolute inset-8 rounded-3xl overflow-hidden flex items-center justify-center'
                 style={{
                   background:
                     "linear-gradient(145deg, #f0f4ff 0%, #ffffff 45%, #e8fff0 100%)",
